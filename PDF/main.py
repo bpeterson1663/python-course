@@ -23,5 +23,16 @@ with open(os.path.join(cwd, "docs/dummy.pdf"), 'rb') as file:
         
 pdf_combiner(inputs)
 
+template = PyPDF2.PdfFileReader(open(os.path.join(cwd, "docs/all.pdf"), 'rb' ))
+watermark = PyPDF2.PdfFileReader(open(os.path.join(cwd, 'docs/wtr.pdf'), 'rb'))
+output = PyPDF2.PdfFileWriter()
+
+for i in range(template.getNumPages()):
+    page = template.getPage(i)
+    page.mergePage(watermark.getPage(0))
+    output.addPage(page)
+    
+    with open(os.path.join(cwd, 'docs/watermarked_output.pdf'), 'wb') as file:
+         output.write(file)
 
 # python3 main.py docs/dummy.pdf docs/twopage.pdf docs/tilt.pd
